@@ -56,7 +56,10 @@ Counting the number of each class contained in 10,000 images, I find that 77% of
 ![Class Distribution](figure/ClassDistribution.png)
 
 #### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+Keeping the above finding in mind, I try to carefully split the dataset to the subsets so that the ratio of the number of classes remains as unchanged as possible. As the dataset consists of 100 TFRecord files, I count the number of objects in each record and assign it to one of the splits.
+
+The right panel in the below figure shows the number of objects contained in each tfrecord. Note that most of the records do not contain any objects labeld as Cyclists, and that Pedestrians class obviously tends to appear in dense environments.  
+![Distribution over TFRecords](figure/DistributionOverTFRecords.png)
 
 ### Training
 #### Reference experiment

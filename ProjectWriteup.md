@@ -62,6 +62,12 @@ The right panel in the below figure shows the number of objects contained in eac
 ![Distribution over TFRecords](figure/DistributionOverTFRecords.png)
 
 ### Training
+In this section, I introduce the model trainning and its performance. COCO detection metrics is adopted to evaluate performance of the detector. mAP in the COCO detection metrics is calculated by averaging mAPs over 10 IoU thresholds (0.50, 0.55, ..., 0.95). mAPs for objects with specific sizes (large, medium and small) are also calculatled during the validation step.
+Please refer to the following links for detailed information about the metrics.
+
+- https://cocodataset.org/#detection-eval
+- https://blog.zenggyu.com/en/post/2018-12-16/an-introduction-to-evaluation-metrics-for-object-detection/
+
 #### Reference experiment
 Following figure shows the learning curve of the base model over 25,000 steps. Gray and green lines represent the training loss and validation loss, respectively.
 ![Learning Curve of Base Model](figure/LearningCurveBaseModel.png)
@@ -73,3 +79,37 @@ mAP of the base model is 0.132. As expected, mAP significantly varies with the s
 ![mAP of Base Model for Small Objects](figure/mAPSmall_Base.png)
 
 #### Improve on the reference
+To improve performance of the base model, I examine effects of learning rate and image augmentation.
+
+1. Learning rate
+
+When trainning the base model, cosine decay learning rate with the peak value of 0.04 was used. I use different learning rates to understand how they affect the learning curve.
+Here are the learning rates adopted:
+- Cosine decay with a longer duration (light green)
+- Constant learning rate of 0.03 following warmup (purple)
+- Constant learning rate of 0.01 (yellow)
+
+![Comparison of Learning Rate](figure/LR_Comparison.png)
+
+As shown in the fogire below, impact of the use of different learning rates on the learning curve is insignificant. Therefore I continue using the same configuration as the base model in the following analysis.
+
+![Learning Curves with Different Learning Rates](figure/LearningCurve_DifferentLR.png)
+
+2. Image augmentation
+
+Image augmentation has been known as a good way to make ML models more robust against variations of data. During the trainning of the base model, random_horizongal_flip and random_crop_image augmentations were used.
+
+Here I add random_rgb_to_gray augmentation to the configuration for the base model, which change the color scale of images from RGB to gray scale with a probability of 0.2. With this augmentation, the learning curve changes as shown below, where the trainning and validation loss obtained with augmented images are represented by cyan and magenta lines, respectively.
+
+![Learning Curves of Base model and Augmentation 1](figure/LearningCurves_Base_Augmentation1.png)
+
+Validation loss is lower in the mode with augmented images while convergence of the training loss is similar to that of the base model.
+
+Consequently, mAP is improved by 40% with the image augmentation as shown in the following figures. This suggests that the added augmentation has reduced dependency of the model on object's colors.
+
+![mAP of Base Model and Augmentation1](figure/mAP_Base_Augmentation1.png)
+![mAP of Base Model and Augmentation1 for Large Objects](figure/mAPLarge_Base_Augmentation1.png)
+![mAP of Base Model and Augmentation1 for Medium Objects](figure/mAPMedium_Base_Augmentation1.png)
+![mAP of Base Model and Augmentation1 for Small Objects](figure/mAPSmall_Base_Augmentation1.png)
+
+Other than the above, I have investigated effects of different image augmentations as summarized in `Explore augmentations.ipynb`. However, I can't see further peformance improvements compared to the model introduced here. This is probably because the complexity of object detection tasks, where one image can contain multiple target with different class, size, appearance and so on, as opposed to classification problems. It is difficult to accurately predict how each augmentation affect the model performance.

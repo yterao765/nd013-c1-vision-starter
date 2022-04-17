@@ -63,6 +63,13 @@ The right panel in the below figure shows the number of objects contained in eac
 
 ### Training
 #### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+Following figure shows the learning curve of the base model over 25,000 steps. Gray and green lines represent the training loss and validation loss, respectively.
+![Learning Curve of Base Model](figure/LearningCurveBaseModel.png)
+
+mAP of the base model is 0.132. As expected, mAP significantly varies with the size of objects. There are many extremely small objects in the dataset which even human are hardly able to detect. Therefore mAP over the entire objects is small regardless of quite better peformances against the larger objects.
+![mAP of Base Model](figure/mAP_Base.png)
+![mAP of Base Model for Large Objects](figure/mAPLarge_Base.png)
+![mAP of Base Model for Medium Objects](figure/mAPMedium_Base.png)
+![mAP of Base Model for Small Objects](figure/mAPSmall_Base.png)
 
 #### Improve on the reference

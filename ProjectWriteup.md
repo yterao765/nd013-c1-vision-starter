@@ -41,8 +41,20 @@ tensorboard --logdir=training
 ```
 
 ### Dataset
+Here I summarize my findings about the dataset as a result of EDA. Then I introduce a strategy to split the entire dataset into three subsets for training, validation and test. Please see `Exploratory Data Analysis.ipynb` for details.
 #### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+1. Images contained the dataset
+
+The figure below shows 14 images randomly selected from the dataset. It is clear that they were taken in a variety of environments in terms of time, weather, traffic density and so on.
+![Example Images](figure/ExampleImages.png)
+
+2. Class distribution
+
+There are three classes in the dataset, namely Vehicles, Pedestrians and Cyclists. It is important to know class distribution over the dataset to come up with a good strategy for splitting.
+
+Counting the number of each class contained in 10,000 images, I find that 77% of objects in the dataset are labeld as Vehicles, while Cyclists class occupy less than 1% of the total as shown in the figure below. We shoud be cautious about this class imbalance when splitting the data into subsets. 
+![Class Distribution](figure/ClassDistribution.png)
+
 #### Cross validation
 This section should detail the cross validation strategy and justify your approach.
 

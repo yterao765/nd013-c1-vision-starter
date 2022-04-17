@@ -6,7 +6,39 @@ In this project, I try to train a model which detects typical traffic participan
 It is a critical step of training a ML model to sufficiently understand data to be used. Therefore I perform a thorough EDA in advance of the training.
 
 ### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
+<!-- This section should contain a brief description of the steps to follow to run the code for this repository. -->
+Here is a set up instruction to run the code in this repository.
+
+1. Build the docker image with:
+```
+docker build -t <IMAGE NAME> -f Docker file .
+```
+2. Create a container with:
+```
+ docker run --shm-size=<ALLOCATED MEMORY SIZE> --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -it <IMAGE NAME> bash
+```
+(Hereafter, you are in the container)
+
+3. Download and process the data:
+```
+python download_process.py --data_dir /app/project/data/processed/ --temp_dir /app/project/data/raw/
+```
+4. Create splits:
+```
+python create_splits.py --data_dir app/project/data/
+```
+5. Training:
+```
+python model_main_tf2.py --model_dir=/app/project/training/reference/ --pipeline_config_path=/app/project/training/reference/pipeline_new.config
+```
+6. Evaluation:
+```
+python model_main_tf2.py --model_dir=/app/project/training/reference/ --pipeline_config_path=/app/project/training/reference/pipeline_new.config --checkpoint_dir=/app/project/training/reference/
+```
+7. Monitor the processses with TensorBoard:
+```
+tensorboard --logdir=training
+```
 
 ### Dataset
 #### Dataset analysis
